@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { AreaView } from '../components';
+import { View, Text, TouchableHighlight, FlatList } from 'react-native';
+import { AreaView, Search } from '../components';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchMeta } from '../store/meta';
-
-const themeColor = '#682cbb';
-const softThemeColor = '#ada9bf';
+import { themeColor, lineColor, softColor } from './config';
 
 const EightPointBurst = ({ style, size, color, children }) => {
   return (
@@ -52,8 +50,9 @@ const EightPointBurst = ({ style, size, color, children }) => {
 };
 
 const Item = ({ data, onPress }) => (
-  <TouchableOpacity 
+  <TouchableHighlight 
     activeOpacity={0.7}
+    underlayColor={softColor}
     onPress={onPress}
   >
     <View style={{
@@ -61,9 +60,8 @@ const Item = ({ data, onPress }) => (
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingTop: 15,
-      paddingBottom: 15,
-      borderBottomColor: softThemeColor,
+      paddingVertical: 15,
+      borderBottomColor: lineColor,
       borderBottomWidth: 1
     }}>
       <EightPointBurst 
@@ -100,22 +98,21 @@ const Item = ({ data, onPress }) => (
         fontSize: 30
       }}>{data.name.replace("سُورَةُ ", "")}</Text>
     </View>
-  </TouchableOpacity>
+  </TouchableHighlight>
 );
 
 const Home = ({ navigation }) => {
+  const [keyword, setKeyword] = useState("");
   const meta = useAppSelector(state => state.meta);
   const getMeta = useAppDispatch(fetchMeta);
 
   useEffect(() => {
-    console.log("meta request", meta);
     if (meta.isIdle) {
       getMeta();
     }
   }, [])
 
   useEffect(() => {
-    console.log('meta ready', meta.isReady);
     if (meta.isReady || meta.hasError) {
       SplashScreen.hide();
     }
@@ -123,11 +120,11 @@ const Home = ({ navigation }) => {
 
   return (
     <AreaView color="#ffffff">
+      <Search value={keyword} onChange={(value) => setKeyword(value)} />
       {meta.isReady ?
         <FlatList
           style={{
-            paddingLeft: 20,
-            paddingRight: 20
+            paddingHorizontal: 20
           }}
           data={meta.data.surahs?.references}
           renderItem={({ index, item }) => <Item 

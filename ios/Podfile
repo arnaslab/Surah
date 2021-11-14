@@ -12,6 +12,10 @@ target 'Surah' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'SurahTests' do
     inherit! :complete
     # Pods for testing
