@@ -14,7 +14,7 @@ const onShare = async (message) => {
   }
 }
 
-const Page = ({ number, data, onNextAyah }) => {
+const Page = ({ data, isFirst, isLast, onNextAyah }) => {
   const [qoriIdx, setQoriIdx] = useState(0);
   const selectedQori = data?.qori[qoriIdx];
 
@@ -82,6 +82,15 @@ const Page = ({ number, data, onNextAyah }) => {
 				}}>
 					{data.terjemah}
 				</Text>
+				<View style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					marginBottom: 20
+				}}>
+					<Text>{!isFirst && '<< swipe to prev ayah'}</Text>
+					<Text>{!isLast && 'swipe to next ayah >>'}</Text>
+				</View>
 			</ScrollView>
 			<View style={{
 				padding: 10,
@@ -187,7 +196,12 @@ const Ayah = ({ navigation, route }) => {
         }}
       >
 				{ayah.isReady 
-					? <Page data={ayah.data} onNextAyah={handleNextAyah} />
+					? <Page 
+						data={ayah.data} 
+						onNextAyah={handleNextAyah} 
+						isFirst={ayahNum === 1}
+						isLast={ayahNum === meta.data?.ayahs.count}
+					/>
 					: <Loader fullScreen />
 				}
 			</GestureRecognizer>
