@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import Icon from './Icon';
 
-const TransparentButton = ({ onPress, icon, size = 25, color, style, disabled }) => (
+const IconButton = ({ onPress, icon, size = 25, color, style, disabled }) => (
   <TouchableOpacity 
 		activeOpacity={0.7}
 		underlayColor="#000000"
@@ -21,4 +21,4 @@ const TransparentButton = ({ onPress, icon, size = 25, color, style, disabled })
   </TouchableOpacity>
 )
 
-export default TransparentButton;
+export default IconButton;

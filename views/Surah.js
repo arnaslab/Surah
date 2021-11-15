@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableHighlight } from 'react-native';
+import { View, Text, FlatList, TouchableHighlight, Image, ImageBackground } from 'react-native';
 import { useEffect } from 'react/cjs/react.development';
 import { AreaView, Loader } from '../components';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -7,12 +7,17 @@ import { fetchSurah } from '../store/surah';
 import { themeColor, softColor } from './config';
 
 const Header = ({ data }) => (
+  <ImageBackground 
+    source={require('../assets/alquran.png')}
+  > 
   <View style={{
     borderRadius: 20,
+    opacity: 0.8,
     backgroundColor: themeColor,
     display: 'flex',
     alignItems: 'center',
-    padding: 20
+    padding: 20,
+    position: 'relative'
   }}>
     <Text style={{
       fontFamily: 'Katibeh-Regular',
@@ -27,10 +32,22 @@ const Header = ({ data }) => (
     <Text style={{
       color: '#ffffff'
     }}>{data.englishNameTranslation}</Text>
+    {![1,9].includes(data.number) &&
+      <Text style={{
+        marginTop: 10,
+        paddingTop: 10,
+        borderTopColor: '#ffffff',
+        borderTopWidth: 1,
+        fontFamily: 'Katibeh-Regular',
+        fontSize: 30,
+        color: '#ffffff'
+      }}>بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ </Text>
+    }
   </View>
+  </ImageBackground>
 )
 
-const Item = ({ data, onPress }) => (
+const Item = ({ data, onPress, meta }) => (
   <TouchableHighlight 
     activeOpacity={0.7}
     underlayColor={softColor}
@@ -67,7 +84,7 @@ const Item = ({ data, onPress }) => (
           color: '#000000',
           fontSize: 25,
         }}>
-          {data.text}
+          {data.numberInSurah === 1 && ![1,9].includes(meta.number) ? data.text.substr(39) : data.text}
         </Text>
       </View>
     </View>
@@ -97,6 +114,7 @@ const Surah = ({ navigation, route }) => {
           renderItem={({ index, item }) => <Item 
             index={index} 
             data={item}
+            meta={surah.data}
             onPress={() => navigation.navigate('Ayah', { number: item.number })}
           />}
           keyExtractor={item => item.number}

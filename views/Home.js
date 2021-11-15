@@ -1,53 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { View, Text, TouchableHighlight, FlatList } from 'react-native';
-import { AreaView, Search } from '../components';
+import { AreaView, Search, EightPointBurst } from '../components';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchMeta } from '../store/meta';
-import { themeColor, lineColor, softColor } from './config';
-
-const EightPointBurst = ({ style, size, color, children }) => {
-  return (
-    <View style={{
-      position: 'relative',
-      ...style
-    }}>
-      <View style={{
-        width: size,
-        height: size,
-        backgroundColor: "#ffffff",
-        borderWidth: 2,
-        borderColor: color,
-        transform: [{ rotate: "20deg" }]
-      }} />
-      <View style={{
-        width: size,
-        height: size,
-        position: "absolute",
-        borderWidth: 2,
-        borderColor: color,
-        backgroundColor: "#ffffff",
-        top: 0,
-        left: 0,
-        transform: [{ rotate: "155deg" }]
-      }} />
-      <View style={{
-        width: size - 4.5,
-        height: size - 4.5,
-        position: "absolute",
-        backgroundColor: "#ffffff",
-        top: 2,
-        left: 2,
-        transform: [{ rotate: "20deg" }]
-      }} />
-      <View style={{
-        position: 'absolute'
-      }}>
-        {children}
-      </View>
-    </View>
-  );
-};
+import { themeColor, lineColor, softColor, version } from './config';
 
 const Item = ({ data, onPress }) => (
   <TouchableHighlight 
@@ -118,26 +75,39 @@ const Home = ({ navigation }) => {
     }
   }, [meta.isReady, meta.hasError]);
 
+  const filterSurah = (data) => {
+    if (data && keyword.length > 0) {
+      return data.filter(_ => _.englishName.toLowerCase().includes(keyword.toLowerCase()))
+    } else {
+      return data;
+    }
+  }
+
   return (
     <AreaView color="#ffffff">
       <Search value={keyword} onChange={(value) => setKeyword(value)} />
-      {meta.isReady ?
+      {meta.isReady &&
         <FlatList
           style={{
             paddingHorizontal: 20
           }}
-          data={meta.data.surahs?.references}
+          data={filterSurah(meta.data.surahs?.references)}
           renderItem={({ index, item }) => <Item 
             index={index} 
             data={item} 
             onPress={() => navigation.navigate('Surah', { number: item.number })}
           />}
           keyExtractor={item => item.number}
+          ListFooterComponent={() => (
+            <View style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: 10
+            }}>
+              <Text>Version {version}</Text>
+            </View>
+          )}
         />
-      : meta.hasError ?
-        <Text>{meta.error}</Text>
-      :
-        <Text>Loading...</Text>
       }
     </AreaView>
   )

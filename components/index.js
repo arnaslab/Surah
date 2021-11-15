@@ -2,14 +2,16 @@ import AreaView from './AreaView';
 import Sound from './Sound';
 import Icon from './Icon';
 import Loader from './Loader';
-import TransparentButton from './TransparentButton';
+import IconButton from './IconButton';
 import Search from './Search';
+import EightPointBurst from './EightPointBrust';
 
 export {
     AreaView,
     Sound,
     Icon,
     Loader,
-    TransparentButton,
-    Search
+    IconButton,
+    Search,
+    EightPointBurst
 }
