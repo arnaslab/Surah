@@ -2,6 +2,8 @@
 ### An Awesome Quran App
 Version 1.0.0
 
+powered by: https://alquran.cloud/
+
 Features:
 - list of surah
 - search surah
