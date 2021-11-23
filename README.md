@@ -4,6 +4,9 @@ Version 1.0.0
 
 powered by: https://alquran.cloud/
 
+Become a beta tester:
+![download on play store](https://play.google.com/store/apps/details?id=com.surah)
+
 Features:
 - list of surah
 - search surah
